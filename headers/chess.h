@@ -93,6 +93,8 @@ class Chess {
     Bitboard pawnAttacks[2][64];
     Bitboard knightAttacks[64];
     Bitboard kingAttacks[64];
+    Bitboard bishopMasks[64];
+    Bitboard rookMasks[64];
 
     char notations[6][2] = {{'P', 'p'}, {'N', 'n'}, {'B', 'b'}, {'R', 'r'}, {'Q', 'q'}, {'K', 'k'}};
     char promNotations[4] = {'q', 'r', 'b', 'n'};
@@ -189,9 +191,6 @@ class Chess {
     // Attack detection
     Bitboard rookAttacks(int square, Bitboard occ);
     Bitboard bishopAttacks(int square, Bitboard occ);
-    Bitboard rookMask(int square);
-    Bitboard indexToBlockers(int index, Bitboard mask);
-    int popLSB(Bitboard &bb);
 
     // Validation checks
     bool isInCheck(int kingsqr = -1);

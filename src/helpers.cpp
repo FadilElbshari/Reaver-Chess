@@ -339,9 +339,3 @@ int Chess::countBits(Bitboard& map) {
 Bitboard Chess::getWithSetBit(int square) {
     return (1ULL << square);
 }
-
-int Chess::popLSB(Bitboard &bb) {
-    int lsb = __builtin_ctzll(bb);
-    bb &= bb - 1;
-    return lsb;
-}

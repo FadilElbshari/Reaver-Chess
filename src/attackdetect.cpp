@@ -5,7 +5,7 @@ void Chess::initAttackTables() {
         int rank = sq / 8;
         int file = sq % 8;
 
-        // --- Pawn Attacks ---
+        // Pawn Attacks
         // White
         if (file > 0 && rank < 7) pawnAttacks[WHITE][sq] |= getWithSetBit(sq + 7);
         if (file < 7 && rank < 7) pawnAttacks[WHITE][sq] |= getWithSetBit(sq + 9);
@@ -13,7 +13,7 @@ void Chess::initAttackTables() {
         if (file > 0 && rank > 0) pawnAttacks[BLACK][sq] |= getWithSetBit(sq - 9);
         if (file < 7 && rank > 0) pawnAttacks[BLACK][sq] |= getWithSetBit(sq - 7);
 
-        // --- Knight Attacks ---
+        // Knight Attacks
         Bitboard knight = 0ULL;
         int knightHops[8][2] = {
             { 2, 1}, { 1, 2}, {-1, 2}, {-2, 1},
@@ -27,7 +27,7 @@ void Chess::initAttackTables() {
         }
         knightAttacks[sq] = knight;
 
-        // --- King Attacks ---
+        // King Attacks
         Bitboard king = 0ULL;
         for (int dr = -1; dr <= 1; ++dr) {
             for (int df = -1; df <= 1; ++df) {
@@ -39,6 +39,23 @@ void Chess::initAttackTables() {
             }
         }
         kingAttacks[sq] = king;
+
+
+        // Bishop Attacks
+
+        // top-right, top-left, bottom-left, bottom-right
+        for (int f=file+1, r=rank+1; f<7 && r<7; f++, r++) bishopMasks[sq] |= getWithSetBit(r*8 + f);
+        for (int f=file-1, r=rank+1; f>0 && r<7; f--, r++) bishopMasks[sq] |= getWithSetBit(r*8 + f);
+        for (int f=file-1, r=rank-1; f>0 && r>0; f--, r--) bishopMasks[sq] |= getWithSetBit(r*8 + f);
+        for (int f=file+1, r=rank-1; f<7 && r>0; f++, r--) bishopMasks[sq] |= getWithSetBit(r*8 + f);
+
+        // Rook Attacks
+
+        // up, left, down, right
+        for (int f=file, r=rank+1; r<7; r++) rookMasks[sq] |= getWithSetBit(r*8 + f);
+        for (int f=file-1, r=rank; f>0; f--) rookMasks[sq] |= getWithSetBit(r*8 + f);
+        for (int f=file, r=rank-1; r>0; r--) rookMasks[sq] |= getWithSetBit(r*8 + f);
+        for (int f=file+1, r=rank; f<7; f++) rookMasks[sq] |= getWithSetBit(r*8 + f);
     }
 }
 
@@ -130,34 +147,3 @@ Bitboard Chess::bishopAttacks(int square, Bitboard occ) {
     return attacks;
 }
 
-Bitboard Chess::rookMask(int square) {
-    Bitboard mask = 0ULL;
-    int rank = square / 8;
-    int file = square % 8;
-
-    // Vertical (up and down)
-    for (int r = rank + 1; r <= 6; r++) mask |= (1ULL << (r * 8 + file));
-    for (int r = rank - 1; r >= 1; r--) mask |= (1ULL << (r * 8 + file));
-
-    // Horizontal (left and right)
-    for (int f = file + 1; f <= 6; f++) mask |= (1ULL << (rank * 8 + f));
-    for (int f = file - 1; f >= 1; f--) mask |= (1ULL << (rank * 8 + f));
-
-    return mask;
-}
-
-Bitboard Chess::indexToBlockers(int index, Bitboard mask) {
-    Bitboard blockers = 0ULL;
-    int bits = countBits(mask);
-    int i = 0;
-
-    for (int j = 0; j < 64 && i < bits; j++) {
-        if ((mask >> j) & 1ULL) {
-            if (index & (1 << i))
-                blockers |= (1ULL << j);
-            i++;
-        }
-    }
-
-    return blockers;
-}

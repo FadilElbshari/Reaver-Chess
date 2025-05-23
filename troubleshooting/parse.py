@@ -1,6 +1,5 @@
 import copy
 
-
 my_moves = {}
 engine_moves = {}
 
