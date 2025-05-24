@@ -203,6 +203,10 @@ class Chess {
     int negaMax(int depth, int alpha, int beta); 
     Eval evaluate();
     Bitboard perft(int depth, int* mates, int originalDepth = -1);//, int& mates);
+
+
+    // ------------------------------------------- JS MODULE -------------------------------------------
+    void makeMoveJS(Move move);
 };
 
 #endif
