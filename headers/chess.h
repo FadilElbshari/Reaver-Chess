@@ -38,6 +38,16 @@ struct GameState
     Bitboard whitePieces=0, blackPieces=0, allPieces=0;
 };
 
+struct MoveType {
+    std::string from;
+    std::string to;
+};
+
+struct MoveData {
+    std::string color;
+    std::string flags;
+};
+
 
 constexpr Bitboard notAFile = 0xfefefefefefefefeULL;
 constexpr Bitboard notHFile = 0x7f7f7f7f7f7f7f7fULL;
@@ -134,6 +144,7 @@ class Chess {
     bool isCaptureMove(Move& move);    
     U8 squareFromNotation(const std::string& square);
     std::string notationFromSquare(Move& move);
+    std::string getNotation(U8 square);
 
 
     // 2) square related 
@@ -206,7 +217,8 @@ class Chess {
 
 
     // ------------------------------------------- JS MODULE -------------------------------------------
-    void makeMoveJS(Move move);
+    MoveData makeMoveJS(Move move);
+    std::vector<Move> GenerateLegalMovesJS();
 };
 
 #endif

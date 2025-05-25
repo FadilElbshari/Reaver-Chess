@@ -133,7 +133,7 @@ void Chess::move(std::string move) {
 
 // ------------------------------------------- JS MODULE -------------------------------------------
 
-void Chess::makeMoveJS(Move move) {
+MoveData Chess::makeMoveJS(Move move) {
     U8 from = getFromSquare(move);
     U8 to = getToSquare(move);
 
@@ -166,6 +166,7 @@ void Chess::makeMoveJS(Move move) {
     stackPointer++;
 
     bool isCapture = isCaptureMove(move);
+    std::string flagInstance = "";
 
     promotedPiece = getPromotedPiece(move);
     capturedPiece = getPieceType(to);
@@ -201,15 +202,18 @@ void Chess::makeMoveJS(Move move) {
     } else {
         movePiece(pieceType, color, from, to);
         if (flags == EN_PASSANT_FLAG) {
+            flagInstance += "e";
             capturedPiece = PAWN;
             unsetBit(bitboards[capturedPiece][!color], to + (!color ? 8 : -8));
         } else if (isCapture) {
             unsetBit(bitboards[capturedPiece][!color], to);
         } else if (flags == CASTLE_FLAG) {
             if (getFile(to) == KING_SIDE_CASTLE_FILE) {
+                flagInstance += "k";
                 unsetBit(bitboards[ROOK][color], from+3);
                 setBit(bitboards[ROOK][color], from+1);
             } else if (getFile(to) == QUEEN_SIDE_CASTLE_FILE) {
+                flagInstance += "q";
                 unsetBit(bitboards[ROOK][color], from-4);
                 setBit(bitboards[ROOK][color], from-1);
             }
@@ -222,7 +226,12 @@ void Chess::makeMoveJS(Move move) {
         moveRule50Count++;
     }
 
+    MoveData data = {(currentTurn ? "w" : "b"), flagInstance};
+
     currentTurn ^= 1;
 
     saveChanges();
+
+    return data;
+    
 }

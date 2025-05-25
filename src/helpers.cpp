@@ -36,6 +36,9 @@ std::string Chess::notationFromSquare(Move& move) {
     std::string(1, getRank(to) + '1') +
     promPiece;
 }
+std::string Chess::getNotation(U8 square) {
+    return std::string(1, getFile(square) + 'a') + std::string(1, getRank(square) + '1');
+}
 
 U8 Chess::getRank(U8 square) {
     return (char)(square/8);

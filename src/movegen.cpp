@@ -355,3 +355,48 @@ int Chess::GenerateLegalMoves(Move* buffer) {
 
     return legalCounter;
 }
+
+
+// ------------------------------------------- JS MODULE -------------------------------------------
+std::vector<Move> Chess::GenerateLegalMovesJS() {
+    int count = 0;
+    std::vector<Move> LegalMoves;
+    Move moveBuffer[256];
+
+    for (int from = 0; from < 64; ++from) {
+        U8 pieceType = getPieceType(from);
+        if (pieceType==NO_PIECE || getPieceColor(from)!=currentTurn) continue;
+
+        if (pieceType == PAWN) {
+            count += getPawnMoves(moveBuffer+count, from);
+        }
+        else if (pieceType == BISHOP) {
+            count += getBishopMoves(moveBuffer+count, from);
+        }
+        else if (pieceType == KNIGHT) {
+            count += getKnightMoves(moveBuffer+count, from);
+        }
+        else if (pieceType == ROOK) {
+            count += getRookMoves(moveBuffer+count, from);
+        }
+        else if (pieceType == QUEEN) {
+            count += getQueenMoves(moveBuffer+count, from);
+        }
+        else if (pieceType == KING) {
+            count += getKingMoves(moveBuffer+count, from);
+        }
+    }
+
+
+
+    for (int i = 0; i < count; ++i) {
+        makeMove(moveBuffer[i]);
+        if (!isInCheck()) {
+            Move move = moveBuffer[i];
+            LegalMoves.push_back(move);
+        }
+        undoMove();
+    }
+
+    return LegalMoves;
+}
