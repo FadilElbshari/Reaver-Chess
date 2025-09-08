@@ -1,8 +1,8 @@
-#include "chess.h"
+#include <chess.h>
 
-bool Chess::isInCheck(int kingsqr) {
-
+bool Chess::isInCheck(int kingsqr, bool flip) {
     bool isWhite = (kingsqr == -1) ? !currentTurn : currentTurn;
+    if (flip) isWhite = (kingsqr == -1) ? currentTurn : !currentTurn;
 
     int K_SQUARE = (kingsqr == -1) ? kingSquare[isWhite] : kingsqr;
 
@@ -61,7 +61,7 @@ bool Chess::isLegalMove(U8 from, U8 to) {
 }
 
 bool Chess::isCheckMate() {
-    if (!isInCheck(kingSquare[currentTurn])) return false;
+    if (!isInCheck(-1, true)) return false;
         Move moveBuffer[MAX_MOVES];
 
         int moveCount = GenerateMoves(moveBuffer);
@@ -78,7 +78,7 @@ bool Chess::isCheckMate() {
     } 
 
 bool Chess::isStaleMate() {
-    if (isInCheck()) return false;
+    if (isInCheck(-1, true)) return false;
         Move moveBuffer[MAX_MOVES];
 
         int moveCount = GenerateMoves(moveBuffer);

@@ -1,4 +1,4 @@
-#include "chess.h"
+#include <chess.h>
 #include <iostream>
 #include <cctype>
 #include <algorithm>
@@ -110,13 +110,13 @@ void runInterface() {
             bool valid = !depthStr.empty() && std::all_of(depthStr.begin(), depthStr.end(), ::isdigit);
             if (valid) {
                 int depth = std::stoi(depthStr);
-                print("You entered perft depth: ", 0);
+                print("You entered evaluate depth: ", 0);
                 print(depth);
 
-                print(Board->negaMax(depth, -INF, INF));
+                print(Board->negaMax(depth, -INF, INF) * (Board->currentTurn ? -1 : 1));
 
             } else {
-                print("Invalid depth. Please provide a number after 'perft '.", 1, 1);
+                print("Invalid depth. Please provide a number after 'evaluate '.", 1, 1);
             }
 
             

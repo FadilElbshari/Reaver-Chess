@@ -1,13 +1,11 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <math.h>
 #include <cstdint>
 #include <chrono>
 #include <cstring>
-
-
-#ifndef CHESS_H
-#define CHESS_H
 
 
 #define MAX_MOVES 256
@@ -44,6 +42,8 @@ struct MoveType {
 };
 
 struct MoveData {
+    int status;
+    std::string san;
     std::string color;
     std::string flags;
 };
@@ -165,7 +165,7 @@ class Chess {
     void movePiece(U8 piece, U8 color, U8 from, U8 to); 
     void makeMove(Move &move);
     void undoMove();
-    void move(std::string move);
+    int move(std::string move);
 
 
     // Displaying data
@@ -204,14 +204,14 @@ class Chess {
     Bitboard bishopAttacks(int square, Bitboard occ);
 
     // Validation checks
-    bool isInCheck(int kingsqr = -1);
+    bool isInCheck(int kingsqr = -1, bool flip = false);
     bool isLegalMove(U8 from, U8 to);
     bool isCheckMate();
     bool isStaleMate();
     U8 isGameOver();
 
     // Evaluation
-    int negaMax(int depth, int alpha, int beta); 
+    Eval negaMax(int depth, int alpha, int beta); 
     Eval evaluate();
     Bitboard perft(int depth, int* mates, int originalDepth = -1);//, int& mates);
 
@@ -219,7 +219,9 @@ class Chess {
     // ------------------------------------------- JS MODULE -------------------------------------------
     MoveData makeMoveJS(Move move);
     std::vector<Move> GenerateLegalMovesJS();
+    std::string getTurn();
+    MoveData moveJS(std::string move);
+
 };
 
-#endif
 

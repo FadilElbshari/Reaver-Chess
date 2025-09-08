@@ -1,4 +1,4 @@
-#include "chess.h"
+#include <chess.h>
 
 void Chess::makeMove(Move &move) {
     U8 from = getFromSquare(move);
@@ -22,7 +22,19 @@ void Chess::makeMove(Move &move) {
     gs.kingSquare[0] = kingSquare[0];
     gs.kingSquare[1] = kingSquare[1];
 
-    memcpy(gs.bitboards, bitboards, sizeof(Bitboard)*12);
+    gs.bitboards[PAWN][WHITE] = bitboards[PAWN][WHITE];
+    gs.bitboards[BISHOP][WHITE] = bitboards[BISHOP][WHITE];
+    gs.bitboards[KNIGHT][WHITE] = bitboards[KNIGHT][WHITE];
+    gs.bitboards[ROOK][WHITE] = bitboards[ROOK][WHITE];
+    gs.bitboards[QUEEN][WHITE] = bitboards[QUEEN][WHITE];
+    gs.bitboards[KING][WHITE] = bitboards[KING][WHITE];
+
+    gs.bitboards[PAWN][BLACK] = bitboards[PAWN][BLACK];
+    gs.bitboards[BISHOP][BLACK] = bitboards[BISHOP][BLACK];
+    gs.bitboards[KNIGHT][BLACK] = bitboards[KNIGHT][BLACK];
+    gs.bitboards[ROOK][BLACK] = bitboards[ROOK][BLACK];
+    gs.bitboards[QUEEN][BLACK] = bitboards[QUEEN][BLACK];
+    gs.bitboards[KING][BLACK] = bitboards[KING][BLACK];
 
     gs.whitePieces = whitePieces;
     gs.blackPieces = blackPieces;
@@ -101,7 +113,7 @@ void Chess::undoMove() {
     stackPointer--;
     GameState gs = gameStateStack[stackPointer];
 
-    currentTurn ^= 1;
+    currentTurn = gs.currentTurn;
     castlingRights = gs.castlingRights;
     enPassantSquare = gs.enPassantSquare;
     moveRule50Count = gs.fiftyMoveRuleCounter;
@@ -111,24 +123,35 @@ void Chess::undoMove() {
     kingSquare[0] = gs.kingSquare[0];
     kingSquare[1] = gs.kingSquare[1];
 
-    memcpy(bitboards, gs.bitboards, sizeof(Bitboard)*12);
+    bitboards[PAWN][WHITE] = gs.bitboards[PAWN][WHITE];
+    bitboards[BISHOP][WHITE] = gs.bitboards[BISHOP][WHITE];
+    bitboards[KNIGHT][WHITE] = gs.bitboards[KNIGHT][WHITE];
+    bitboards[ROOK][WHITE] = gs.bitboards[ROOK][WHITE];
+    bitboards[QUEEN][WHITE] = gs.bitboards[QUEEN][WHITE];
+    bitboards[KING][WHITE] = gs.bitboards[KING][WHITE];
+
+    bitboards[PAWN][BLACK] = gs.bitboards[PAWN][BLACK];
+    bitboards[BISHOP][BLACK] = gs.bitboards[BISHOP][BLACK];
+    bitboards[KNIGHT][BLACK] = gs.bitboards[KNIGHT][BLACK];
+    bitboards[ROOK][BLACK] = gs.bitboards[ROOK][BLACK];
+    bitboards[QUEEN][BLACK] = gs.bitboards[QUEEN][BLACK];
+    bitboards[KING][BLACK] = gs.bitboards[KING][BLACK];
 
     whitePieces = gs.whitePieces;
     blackPieces = gs.blackPieces;
     allPieces = gs.allPieces;
 }
 
-void Chess::move(std::string move) {
+int Chess::move(std::string move) {
 
     U8 from = squareFromNotation(move.substr(0, 2));
     U8 to = squareFromNotation(move.substr(2, 2));
 
     bool legality = isLegalMove(from, to);
     if (legality) {
-        std::cout << "Move Made\n";
-        return;
+        return 1;
     }
-    std::cout << "Illegal Move\n";
+    return 0;
 }
 
 // ------------------------------------------- JS MODULE -------------------------------------------
@@ -226,7 +249,27 @@ MoveData Chess::makeMoveJS(Move move) {
         moveRule50Count++;
     }
 
-    MoveData data = {(currentTurn ? "w" : "b"), flagInstance};
+    std::string san;
+
+    if(pieceType!=PAWN) san+=notations[pieceType][0];
+    if (isCapture) {
+        if(pieceType==PAWN) {
+            san+=getNotation(from)[0];
+        }
+        san+="x";
+    }
+
+    san+=getNotation(to);
+
+    if (isInCheck()) san+="+";
+
+    if (getFlags(move) == KING_SIDE_CASTLE_FILE) {
+        san = "O-O";
+    } else if (getFlags(move) == QUEEN_SIDE_CASTLE_FILE) {
+        san = "O-O-O";
+    }
+
+    MoveData data = {1, san, (currentTurn ? "w" : "b"), flagInstance};
 
     currentTurn ^= 1;
 
@@ -234,4 +277,22 @@ MoveData Chess::makeMoveJS(Move move) {
 
     return data;
     
+}
+
+MoveData Chess::moveJS(std::string move) {
+
+    U8 from = squareFromNotation(move.substr(0, 2));
+    U8 to = squareFromNotation(move.substr(2, 2));
+
+    std::vector<Move> Moves = GenerateLegalMovesJS();
+    MoveData data;
+
+    for (Move move : Moves) {
+        if (from == getFromSquare(move) && to == getToSquare(move)) {
+            data = makeMoveJS(move);
+            return data;
+        }
+    }
+    data = {0, "", "", ""};
+    return data;
 }

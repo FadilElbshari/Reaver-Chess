@@ -1,12 +1,12 @@
-#include "chess.h"
+#include <chess.h>
 
 
-int Chess::negaMax(int depth, int alpha, int beta) {
+Eval Chess::negaMax(int depth, int alpha, int beta) {
     if (depth==0) return evaluate();
 
     int maxEval = -INF;
 
-    Move moveBuffer[256];
+    Move moveBuffer[MAX_MOVES];
     int moveCount = GenerateLegalMoves(moveBuffer);
     if (moveCount == 0) return isInCheck() ? -INF + depth : 0; // checkmate or stalemate
     
@@ -14,7 +14,7 @@ int Chess::negaMax(int depth, int alpha, int beta) {
         Move move = moveBuffer[i];
 
         makeMove(move);
-        int eval = -negaMax(depth - 1, -beta, -alpha);
+        Eval eval = -negaMax(depth - 1, -beta, -alpha);
         undoMove();
 
         if (eval >= beta)

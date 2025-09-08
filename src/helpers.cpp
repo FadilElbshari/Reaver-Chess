@@ -1,4 +1,4 @@
-#include "chess.h"
+#include <chess.h>
 
 
 U8 Chess::getFromSquare(Move& move) {
@@ -110,7 +110,12 @@ std::string Chess::getFen() {
             fen += std::string(1, current);
         }
         
-        if (square == 7) break;
+        if (square == 7) {
+            if (emptySquares > 0) {
+                fen += std::to_string(emptySquares);
+            }
+            break;
+        };
         square++;
         if (!(square%8)){
             if (emptySquares > 0) {
@@ -312,8 +317,8 @@ void Chess::init(std::string fen) {
 
     moveRule50Count = (fen[index] - '0');
     
-    std::cout << "Finished Parsing Fen" << "\n";
-    std::cout << "En Passant Square = " << (int)enPassantSquare << "\n\n";
+    // std::cout << "Finished Parsing Fen" << "\n";
+    // std::cout << "En Passant Square = " << (int)enPassantSquare << "\n\n";
 
     saveChanges(); 
     initMoveTables();
@@ -341,4 +346,11 @@ int Chess::countBits(Bitboard& map) {
 }
 Bitboard Chess::getWithSetBit(int square) {
     return (1ULL << square);
+}
+
+
+// ------------------------------------------- JS MODULE -------------------------------------------
+
+std::string Chess::getTurn() {
+    return currentTurn ? "w" : "b";
 }

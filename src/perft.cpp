@@ -1,4 +1,4 @@
-#include "chess.h"
+#include <chess.h>
 
 Bitboard Chess::perft(int depth, int* mates, int originalDepth) {
     

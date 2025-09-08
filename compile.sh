@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the source files
-SRC_FILES=$(find src/ -name "*.cpp")
+SRC_FILES=$(find src/ -name "*.cpp" ! -name "bindings.cpp")
 
 # Define the output executable name
 OUTPUT="main"
