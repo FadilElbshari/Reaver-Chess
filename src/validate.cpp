@@ -16,7 +16,7 @@ bool Chess::isInCheck(int kingsqr, bool flip) {
     return false;
 }
 
-bool Chess::isLegalMove(U8 from, U8 to) {
+bool Chess::isLegalMove(U8 from, U8 to, int promotionPiece) {
 
     int moveCount = 0;
     U8 pieceType = getPieceType(from);
@@ -44,7 +44,7 @@ bool Chess::isLegalMove(U8 from, U8 to) {
     for (int i=0; i<moveCount; i++) {
         Move move = moveBuffer[i];
         
-        if(getFromSquare(move) == from && getToSquare(move) == to) {
+        if(getFromSquare(move) == from && getToSquare(move) == to && promotionPiece == getPromotedPiece(move)) {
 
             makeMove(move);
             isLegal = (isInCheck() ? false : true);

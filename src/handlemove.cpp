@@ -142,16 +142,38 @@ void Chess::undoMove() {
     allPieces = gs.allPieces;
 }
 
-int Chess::move(std::string move) {
+bool Chess::move(std::string move) {
 
     U8 from = squareFromNotation(move.substr(0, 2));
     U8 to = squareFromNotation(move.substr(2, 2));
 
-    bool legality = isLegalMove(from, to);
-    if (legality) {
-        return 1;
+    int promotionPiece = NO_PIECE;
+    if (move.length() == 5) {
+        switch (move[4])
+        {
+        case 'Q':
+            promotionPiece = QUEEN;
+            break;
+        case 'R':
+            promotionPiece = ROOK;
+            break;
+        case 'N':
+            promotionPiece = KNIGHT;
+            break;
+        case 'B':
+            promotionPiece = BISHOP;
+            break;
+        
+        default:
+            break;
+        }
     }
-    return 0;
+
+    bool legality = isLegalMove(from, to, promotionPiece);
+    if (legality) {
+        return true;
+    }
+    return false;
 }
 
 // ------------------------------------------- JS MODULE -------------------------------------------
@@ -284,11 +306,34 @@ MoveData Chess::moveJS(std::string move) {
     U8 from = squareFromNotation(move.substr(0, 2));
     U8 to = squareFromNotation(move.substr(2, 2));
 
+    int promotionPiece = NO_PIECE;
+    if (move.length() == 5) {
+        switch (move[4])
+        {
+        case 'Q':
+            promotionPiece = QUEEN;
+            break;
+        case 'R':
+            promotionPiece = ROOK;
+            break;
+        case 'N':
+            promotionPiece = KNIGHT;
+            break;
+        case 'B':
+            promotionPiece = BISHOP;
+            break;
+        
+        default:
+            break;
+        }
+    }
+
+
     std::vector<Move> Moves = GenerateLegalMovesJS();
     MoveData data;
 
     for (Move move : Moves) {
-        if (from == getFromSquare(move) && to == getToSquare(move)) {
+        if (from == getFromSquare(move) && to == getToSquare(move) && promotionPiece == getPromotedPiece(move)) {
             data = makeMoveJS(move);
             return data;
         }

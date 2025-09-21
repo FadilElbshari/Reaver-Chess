@@ -165,7 +165,7 @@ class Chess {
     void movePiece(U8 piece, U8 color, U8 from, U8 to); 
     void makeMove(Move &move);
     void undoMove();
-    int move(std::string move);
+    bool move(std::string move);
 
 
     // Displaying data
@@ -205,7 +205,7 @@ class Chess {
 
     // Validation checks
     bool isInCheck(int kingsqr = -1, bool flip = false);
-    bool isLegalMove(U8 from, U8 to);
+    bool isLegalMove(U8 from, U8 to, int promotionPiece);
     bool isCheckMate();
     bool isStaleMate();
     U8 isGameOver();

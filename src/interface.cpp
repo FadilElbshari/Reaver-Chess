@@ -71,18 +71,22 @@ void runInterface() {
             delete Board;
             Board = new Chess();
             initialised = false;
-        } else if (input.size() == 9 && input.substr(0, 5) == "move ") {
+        } else if ((input.size() == 9 || input.size() == 10) && input.substr(0, 5) == "move ") {
             
             if (!initialised) {
                 print("Please initialise the board first.", 1, 1);
                 continue;
             }
                 std::string move = input.substr(5);
-                if(move.size() == 4) {
+                if(move.size() == 4 || move.size() == 5) {
                     print("Making move: ", 0);
                     print(move, 0);
                     print("........", 1, 1);
-                    Board->move(move);
+                    if (Board->move(move)) {
+                        std::cout << "Move Played!" << std::endl;
+                    } else {
+                       std::cout << "Illegal Move!" << std::endl; 
+                    }
                 } else {
                     print("Invalid move format", 1, 1);
                 }
