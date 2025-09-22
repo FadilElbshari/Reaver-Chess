@@ -30,7 +30,6 @@ void runInterface() {
     bool initialised = false;
 
     displayWelcomeMessage();
-    print("Enter: ", 0);
 
     //Chess Board;
     Chess* Board = new Chess();
