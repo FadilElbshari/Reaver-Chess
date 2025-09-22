@@ -17,6 +17,25 @@ The image below illustrates the full set of available functionalities:
 
 ---
 
+## 🚀 How to Run
+
+#### 1. **Clone the Repository**
+```bash
+git clone https://github.com/FadilElbshari/Reaver-Chess.git
+cd your-repo-name
+```
+#### 2. **Run the run.py python script**
+```bash
+python run.py
+```
+### 3. ***Run executable**
+- An executable with the name main will be available in the main directory.
+  ```bash
+  ./main
+  ```
+
+---
+
 ## ⚠️ Note
 
 🧠 The **evaluation function** is currently under development and not finalized. Contributions or suggestions are welcome!
