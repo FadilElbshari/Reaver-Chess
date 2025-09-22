@@ -1,4 +1,4 @@
-#include <chess.h>
+#include "chess.h"
 #include <iostream>
 #include <cctype>
 #include <algorithm>
@@ -10,7 +10,7 @@ void print(auto value, int breakln = 1, bool padding = 0) {
 
 void displayWelcomeMessage() {
     print("");
-    print("---------------------Welcome to Reaver Chess engine---------------------", 1, 1);
+    print("---------------------Welcome to Reaver Chess---------------------", 1, 1);
     print("[1]     Enter 'init' to initialise a board with starting position.");
     print("[2]     Enter 'custom' to start a board with a custom position (FEN).");
     print("[3]     Enter 'clear' to clear the board and start over.");

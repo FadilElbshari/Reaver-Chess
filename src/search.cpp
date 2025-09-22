@@ -1,4 +1,4 @@
-#include <chess.h>
+#include "chess.h"
 
 
 Eval Chess::negaMax(int depth, int alpha, int beta) {

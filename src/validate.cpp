@@ -1,4 +1,4 @@
-#include <chess.h>
+#include "chess.h"
 
 bool Chess::isInCheck(int kingsqr, bool flip) {
     bool isWhite = (kingsqr == -1) ? !currentTurn : currentTurn;

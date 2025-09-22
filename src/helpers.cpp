@@ -1,4 +1,4 @@
-#include <chess.h>
+#include "chess.h"
 
 
 U8 Chess::getFromSquare(Move& move) {

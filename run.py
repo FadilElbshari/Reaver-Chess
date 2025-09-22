@@ -5,7 +5,7 @@ import os
 command = ["powershell", "g++"]
 
 flags = ["-g", "-O3", "-Wall", "-Wextra", "-pedantic", "-w"]
-include = ["-Iheaders"]
+include = [""]
 
 source_files = []
 
@@ -20,6 +20,6 @@ for root, d_names, f_names in os.walk(path):
 command.extend(source_files)
 command.extend(flags)
 command.extend(include)
-command.extend(["-o", "output/main.exe"])
+command.extend(["-o", "main.exe"])
 
 subprocess.run(command)

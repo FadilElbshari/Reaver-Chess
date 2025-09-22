@@ -1,4 +1,4 @@
-#include <chess.h>
+#include "chess.h"
 
 void Chess::initAttackTables() {
     for (int sq = 0; sq < 64; ++sq) {
