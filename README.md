@@ -28,7 +28,7 @@ cd Reaver-Chess
 ```bash
 python run.py
 ```
-### 3. ***Run executable**
+### 3. **Run executable**
 - An executable with the name main will be available in the main directory.
   ```bash
   ./main
