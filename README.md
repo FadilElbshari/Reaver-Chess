@@ -22,7 +22,7 @@ The image below illustrates the full set of available functionalities:
 #### 1. **Clone the Repository**
 ```bash
 git clone https://github.com/FadilElbshari/Reaver-Chess.git
-cd your-repo-name
+cd Reaver-Chess
 ```
 #### 2. **Run the run.py python script**
 ```bash

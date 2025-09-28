@@ -19,5 +19,6 @@ Eval Chess::evaluate() {
     eval -= countBits(bitboards[BISHOP][BLACK]) * BISHOP_VALUE;
     eval -= countBits(bitboards[ROOK][BLACK])   * ROOK_VALUE;
     eval -= countBits(bitboards[QUEEN][BLACK])  * QUEEN_VALUE;
+
     return eval;
 }

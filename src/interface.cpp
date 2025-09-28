@@ -9,8 +9,10 @@ void print(auto value, int breakln = 1, bool padding = 0) {
 }
 
 void displayWelcomeMessage() {
+    std::cout << "\033[2J\033[H";
     print("");
     print("---------------------Welcome to Reaver Chess---------------------", 1, 1);
+    print("[-1]    Enter 'quit' to quit the program.");
     print("[1]     Enter 'init' to initialise a board with starting position.");
     print("[2]     Enter 'custom' to start a board with a custom position (FEN).");
     print("[3]     Enter 'clear' to clear the board and start over.");
@@ -20,24 +22,21 @@ void displayWelcomeMessage() {
     print("[7]     Enter 'evaluate' followed by a depth value to calculate the evaluation of a given position.");
     print("[8]     Enter 'perft' followed by a depth value to run a timed performance test.");
     print("[9]     Enter 'over' to check if checkmate has occured.");
-    print("[10]    Enter 'fen' to display the current fen.");
-    print("[11]    Enter 'quit' to quit the program.", 1, 1);
-
+    print("[10]    Enter 'fen' to display the current fen.", 1, 1);
 }
 
-void runInterface() {
+void runInterface(Chess* Board) {
     std::string initFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     bool initialised = false;
 
     displayWelcomeMessage();
 
-    //Chess Board;
-    Chess* Board = new Chess();
-
     std::string input = "";
     while (true) {
         print("Enter: ", 0);
         getline(std::cin, input);
+
+        print("");
 
         if (input == "quit" || input == "-1") break;
 
@@ -116,7 +115,7 @@ void runInterface() {
                 print("You entered evaluate depth: ", 0);
                 print(depth);
 
-                print(Board->negaMax(depth, -INF, INF) * (Board->currentTurn ? -1 : 1));
+                print(Board->minimax(depth, -INF, INF));
 
             } else {
                 print("Invalid depth. Please provide a number after 'evaluate '.", 1, 1);
@@ -189,6 +188,9 @@ void runInterface() {
 }
 
 int main() {
-    runInterface();
+    Chess* Board = new Chess();
+    runInterface(Board);
+
+    if (Board != nullptr) delete Board;
     return 0;
 }

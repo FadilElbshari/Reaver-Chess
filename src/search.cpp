@@ -1,30 +1,41 @@
 #include "chess.h"
 
 
-Eval Chess::negaMax(int depth, int alpha, int beta) {
+Eval Chess::minimax(int depth, int alpha, int beta) {
     if (depth==0) return evaluate();
-
-    int maxEval = -INF;
 
     Move moveBuffer[MAX_MOVES];
     int moveCount = GenerateLegalMoves(moveBuffer);
-    if (moveCount == 0) return isInCheck() ? -INF + depth : 0; // checkmate or stalemate
-    
-    for (int i=0; i<moveCount; i++) {
-        Move move = moveBuffer[i];
+    if (moveCount == 0) return isInCheck(-1, true) ? (INF * (currentTurn ? -1 : 1)) : 0; // checkmate or stalemate
 
-        makeMove(move);
-        Eval eval = -negaMax(depth - 1, -beta, -alpha);
-        undoMove();
+    if (currentTurn) {
+        int maxEval = -INF;
+        for (int i=0; i<moveCount; i++) {
+            Move move = moveBuffer[i];
 
-        if (eval >= beta)
-            return beta;
-        if (eval > maxEval)
-            maxEval = eval;
-        if (eval > alpha)
-            alpha = eval;
+            makeMove(move);
+            Eval eval = minimax(depth - 1, alpha, beta);
+            undoMove();
 
+            if (eval > maxEval) maxEval = eval;
+            if (eval > alpha) alpha = eval;
+            if (beta <= alpha) break;
+        }
+        return maxEval;
+
+    } else {
+        int minEval = INF;
+        for (int i=0; i<moveCount; i++) {
+            Move move = moveBuffer[i];
+
+            makeMove(move);
+            Eval eval = minimax(depth - 1, alpha, beta);
+            undoMove();
+
+            if (eval < minEval) minEval = eval;
+            if (eval < beta) beta = eval;
+            if (beta <= alpha) break;
+        }
+        return minEval;
     }
-    
-    return maxEval;
 }

@@ -211,7 +211,7 @@ class Chess {
     U8 isGameOver();
 
     // Evaluation
-    Eval negaMax(int depth, int alpha, int beta); 
+    Eval minimax(int depth, int alpha, int beta); 
     Eval evaluate();
     Bitboard perft(int depth, int* mates, int originalDepth = -1);//, int& mates);
 
