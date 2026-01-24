@@ -1,15 +1,15 @@
-## ♟️ Command Line Interactive Chess Software
+## Command Line Interactive Chess Software
 
 A lightweight command-line tool for working with chess positions. It supports interactive move navigation, position analysis, and performance testing for chess engines.
 
-### ✨ Features
+### Features
 - Navigate through chess positions by making and undoing moves.
 - Run fast **performance test (perft)** functions to benchmark against your own engines.
 - Request board states or FEN (Forsyth–Edwards Notation) at any point for precise position tracking.
 
 ---
 
-## 🛠️ Available Functions
+## Available Functions
 
 The image below illustrates the full set of available functionalities:
 
@@ -17,7 +17,7 @@ The image below illustrates the full set of available functionalities:
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 #### 1. **Clone the Repository**
 ```bash
@@ -36,6 +36,6 @@ python run.py
 
 ---
 
-## ⚠️ Note
+## Note
 
-🧠 The **evaluation function** is currently under development and not finalized. Contributions or suggestions are welcome!
+ The **evaluation function** is currently under development and not finalized. Contributions or suggestions are welcome!
